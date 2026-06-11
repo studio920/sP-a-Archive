@@ -547,9 +547,65 @@ async function openModal(id){
             '</button>'
 
         ).join('');
+document.getElementById('modal-grid').innerHTML =
+[
+    ['Category',p.cat],
+    ['Year',p.year],
+    ['Location',(p.city?p.city+', ':'')+p.loc],
+    ['Area',p.area ? p.area+' sqm' : '—'],
+    ['Client',p.clientName || p.clientType || '—'],
+    ['Status',
+        p.status
+        ? '<span class="sbadge '+badgeClass(p.status)+'">'+p.status+'</span>'
+        : '—'
+    ]
+]
+.map(([l,v])=>
+    '<div><div class="mf-l">'+l+
+    '</div><div class="mf-v">'+
+    (v||'—')+
+    '</div></div>'
+).join('');
 
+const ts = document.getElementById('themes-sec');
+
+if(p.themes && p.themes.length){
+    ts.style.display='';
+    document.getElementById('modal-themes').innerHTML =
+        p.themes
+        .map(t=>'<span class="ttag">'+t+'</span>')
+        .join('');
+}
+else{
+    ts.style.display='none';
+}
+
+const te = document.getElementById('team-sec');
+
+if(p.team && p.team.length){
+    te.style.display='';
+    document.getElementById('modal-team').innerHTML =
+        p.team
+        .map(t=>'<span class="tchip">'+t+'</span>')
+        .join('');
+}
+else{
+    te.style.display='none';
+}
+
+const dl = document.getElementById('modal-drive');
+
+if(p.drive){
+    dl.href = p.drive;
+    dl.classList.remove('off');
+}
+else{
+    dl.href='#';
+    dl.classList.add('off');
+}
     document.getElementById('modal-overlay')
         .classList.add('open');
+        
 }
 function switchModalImg(id,idx){
 
