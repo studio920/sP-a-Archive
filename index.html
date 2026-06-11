@@ -580,16 +580,6 @@ function switchModalImg(id,idx){
             b.classList.toggle('on',i===idx)
         );
 }
-  const p=projects.find(x=>x.id===id)||exProjects.find(x=>x.id===id);if(!p)return;
-  const imgs = [
-    p.img,
-    p.drawing,
-    p.model
-].filter(Boolean);
-  const imgArea=document.getElementById('modal-img');
-  imgArea.querySelectorAll('img').forEach(i=>i.remove());
-  document.querySelectorAll('.mit').forEach((b,i)=>b.classList.toggle('on',i===idx));
-  if(imgs[idx]){const img=document.createElement('img');img.src=gdrive(imgs[idx]);imgArea.insertBefore(img,imgArea.firstChild);}
 
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
 
