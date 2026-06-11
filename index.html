@@ -456,7 +456,7 @@ async function openModal(id){
         p.model
     ].filter(Boolean);
 
-    await preloadImages(imgs);
+    await preloadImages([imgs[startIndex]]);
 let startIndex = 0;
 
 if (imgMode === 'drawing' && p.drawing) {
@@ -472,7 +472,7 @@ if(imgs.length){
     img.src = gdrive(imgs[startIndex]);
     imgArea.insertBefore(img, imgArea.firstChild);
 
-    document.getElementById('modal-overlay').classList.add('open');
+    document.getElementById('modal-img-tabs').innerHTML =
         imgs.map((src,i)=>
             '<button class="mit'+
             (i===startIndex?' on':'')+
