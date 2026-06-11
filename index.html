@@ -466,12 +466,6 @@ else if (imgMode === 'model' && p.model) {
 }
 
 await preloadImages([imgs[startIndex]]);
-if (imgMode === 'drawing' && p.drawing) {
-    startIndex = imgs.indexOf(p.drawing);
-}
-else if (imgMode === 'model' && p.model) {
-    startIndex = imgs.indexOf(p.model);
-}
 if(imgs.length){
     if(noImg) noImg.style.display='none';
 
