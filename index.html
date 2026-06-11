@@ -723,7 +723,10 @@ function parseCSV(text){
   }
   return rows;
 }
-
+function layoutMasonry(){
+  clearTimeout(mTimer);
+  mTimer=setTimeout(doLayout,200);
+}
 function loadDemo(){
   const st=document.getElementById('sheet-status');
   if(st){st.textContent='● demo';st.style.color='rgba(255,150,100,0.5)';}
@@ -819,10 +822,7 @@ document.querySelectorAll('.sb-item').forEach(item=>{
 const M_COL=265,M_GAP=35,M_PAD=35;
 let mTimer=null;
 
-function layoutMasonry(){
-  clearTimeout(mTimer);
-  mTimer=setTimeout(doLayout,200);
-}
+
 
 function doLayout(){
   const canvas=document.getElementById('canvas');
