@@ -442,7 +442,7 @@ function preloadImages(imgs){
         )
     );
 }
-function openModal(id){
+async function openModal(id){
   const p=projects.find(x=>x.id===id)||exProjects.find(x=>x.id===id);
   if(!p)return;
   document.getElementById('modal-name').textContent=p.name;
