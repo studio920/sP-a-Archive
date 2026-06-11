@@ -419,6 +419,37 @@ function updateCounts(){
     lf.innerHTML=locs.map(l=>'<div class="sb-item'+(filters.loc.has(l)?' on':'')+'" onclick="toggleFilter(\'loc\',\''+l+'\',this)"><span>'+l+'</span><span class="sb-count">'+projects.filter(p=>p.loc===l).length+'</span></div>').join('');
   }
 }
+const M_COL=265,M_GAP=35,M_PAD=35;
+let mTimer=null;
+
+
+
+function doLayout(){
+  const canvas=document.getElementById('canvas');
+  const W=canvas.offsetWidth||document.querySelector('.main').offsetWidth||window.innerWidth-220;
+  if(!W)return;
+  const cols=Math.max(1,Math.floor((W-M_PAD*2+M_GAP)/(M_COL+M_GAP)));
+  const heights=new Array(cols).fill(M_PAD);
+  const visible=[...canvas.querySelectorAll('.pcard:not(.dimmed)')];
+  const dimmed=[...canvas.querySelectorAll('.pcard.dimmed')];
+  visible.forEach(card=>card.style.width=M_COL+'px');
+  dimmed.forEach(card=>card.style.width=M_COL+'px');
+  visible.forEach((card,i)=>{
+    const col=i%cols;
+    card.style.left=(M_PAD+col*(M_COL+M_GAP))+'px';
+    card.style.top=heights[col]+'px';
+    heights[col]+=card.offsetHeight+M_GAP;
+  });
+  const maxH=Math.max(...heights)+M_GAP*2;
+  const dH=new Array(cols).fill(maxH);
+  dimmed.forEach((card,i)=>{
+    const col=i%cols;
+    card.style.left=(M_PAD+col*(M_COL+M_GAP))+'px';
+    card.style.top=dH[col]+'px';
+    dH[col]+=card.offsetHeight+M_GAP;
+  });
+  canvas.style.height=(Math.max(...(dimmed.length?dH:heights))+M_PAD)+'px';
+}
 
 function renderCard(p){
   const card=document.createElement('div');
@@ -819,37 +850,7 @@ document.querySelectorAll('.sb-item').forEach(item=>{
   item.addEventListener('click',()=>{if(window.innerWidth<=768)toggleSidebar();});
 });
 
-const M_COL=265,M_GAP=35,M_PAD=35;
-let mTimer=null;
 
-
-
-function doLayout(){
-  const canvas=document.getElementById('canvas');
-  const W=canvas.offsetWidth||document.querySelector('.main').offsetWidth||window.innerWidth-220;
-  if(!W)return;
-  const cols=Math.max(1,Math.floor((W-M_PAD*2+M_GAP)/(M_COL+M_GAP)));
-  const heights=new Array(cols).fill(M_PAD);
-  const visible=[...canvas.querySelectorAll('.pcard:not(.dimmed)')];
-  const dimmed=[...canvas.querySelectorAll('.pcard.dimmed')];
-  visible.forEach(card=>card.style.width=M_COL+'px');
-  dimmed.forEach(card=>card.style.width=M_COL+'px');
-  visible.forEach((card,i)=>{
-    const col=i%cols;
-    card.style.left=(M_PAD+col*(M_COL+M_GAP))+'px';
-    card.style.top=heights[col]+'px';
-    heights[col]+=card.offsetHeight+M_GAP;
-  });
-  const maxH=Math.max(...heights)+M_GAP*2;
-  const dH=new Array(cols).fill(maxH);
-  dimmed.forEach((card,i)=>{
-    const col=i%cols;
-    card.style.left=(M_PAD+col*(M_COL+M_GAP))+'px';
-    card.style.top=dH[col]+'px';
-    dH[col]+=card.offsetHeight+M_GAP;
-  });
-  canvas.style.height=(Math.max(...(dimmed.length?dH:heights))+M_PAD)+'px';
-}
 
 window.addEventListener('resize',layoutMasonry);
 
