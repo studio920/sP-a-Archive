@@ -428,7 +428,20 @@ function renderCard(p){
   card.onclick = () => openModal(p.id);
   document.getElementById('canvas').appendChild(card);
 }
+function preloadImages(imgs){
+    return Promise.all(
+        imgs.map(src =>
+            new Promise(resolve => {
+                const img = new Image();
 
+                img.onload = resolve;
+                img.onerror = resolve;
+
+                img.src = gdrive(src);
+            })
+        )
+    );
+}
 function openModal(id){
   const p=projects.find(x=>x.id===id)||exProjects.find(x=>x.id===id);
   if(!p)return;
@@ -438,10 +451,12 @@ function openModal(id){
   imgArea.querySelectorAll('img').forEach(i=>i.remove());
   const noImg=imgArea.querySelector('.no-img');
   const imgs = [
-    p.img,
-    p.drawing,
-    p.model
-].filter(Boolean);
+        p.img,
+        p.drawing,
+        p.model
+    ].filter(Boolean);
+
+    await preloadImages(imgs);
 let startIndex = 0;
 
 if (imgMode === 'drawing' && p.drawing) {
@@ -457,7 +472,7 @@ if(imgs.length){
     img.src = gdrive(imgs[startIndex]);
     imgArea.insertBefore(img, imgArea.firstChild);
 
-    document.getElementById('modal-img-tabs').innerHTML =
+    document.getElementById('modal-overlay').classList.add('open');
         imgs.map((src,i)=>
             '<button class="mit'+
             (i===startIndex?' on':'')+
