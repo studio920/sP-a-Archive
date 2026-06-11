@@ -551,61 +551,6 @@ async function openModal(id){
     document.getElementById('modal-overlay')
         .classList.add('open');
 }
-
-  const p=projects.find(x=>x.id===id)||exProjects.find(x=>x.id===id);
-  if(!p)return;
-  document.getElementById('modal-name').textContent=p.name;
-  document.getElementById('modal-sub').textContent=(p.city||'')+(p.city&&p.loc?' · ':'')+( p.loc||'')+(p.year?' | '+p.year:'');
-  const imgArea=document.getElementById('modal-img');
-  imgArea.querySelectorAll('img').forEach(i=>i.remove());
-  const noImg=imgArea.querySelector('.no-img');
-  const imgs = [
-    p.img,
-    p.drawing,
-    p.model
-].filter(Boolean);
-
-let startIndex = 0;
-
-if (imgMode === 'drawing' && p.drawing) {
-    startIndex = imgs.indexOf(p.drawing);
-}
-else if (imgMode === 'model' && p.model) {
-    startIndex = imgs.indexOf(p.model);
-}
-
-await preloadImages([imgs[startIndex]]);
-if(imgs.length){
-    if(noImg) noImg.style.display='none';
-
-    const img = document.createElement('img');
-    img.src = gdrive(imgs[startIndex]);
-    imgArea.insertBefore(img, imgArea.firstChild);
-
-    document.getElementById('modal-img-tabs').innerHTML =
-        imgs.map((src,i)=>
-            '<button class="mit'+
-            (i===startIndex?' on':'')+
-            '" onclick="switchModalImg(\''+id+'\','+i+')">'+
-            ['PHOTO','DRAWING','MODEL'][i]+
-            '</button>'
-        ).join('');
-}
-else{
-    if(noImg) noImg.style.display='';
-}
-  document.getElementById('modal-grid').innerHTML=[['Category',p.cat],['Year',p.year],['Location',(p.city?p.city+', ':'')+p.loc],['Area',p.area?p.area+' sqm':'—'],['Client',p.clientName||p.clientType||'—'],['Status',p.status?'<span class="sbadge '+badgeClass(p.status)+'">'+p.status+'</span>':'—']].map(([l,v])=>'<div><div class="mf-l">'+l+'</div><div class="mf-v">'+(v||'—')+'</div></div>').join('');
-  const ts=document.getElementById('themes-sec');
-  if(p.themes&&p.themes.length){ts.style.display='';document.getElementById('modal-themes').innerHTML=p.themes.map(t=>'<span class="ttag">'+t+'</span>').join('');}
-  else ts.style.display='none';
-  const te=document.getElementById('team-sec');
-  if(p.team&&p.team.length){te.style.display='';document.getElementById('modal-team').innerHTML=p.team.map(t=>'<span class="tchip">'+t+'</span>').join('');}
-  else te.style.display='none';
-  const dl=document.getElementById('modal-drive');
-  if(p.drive){dl.href=p.drive;dl.classList.remove('off');}else{dl.href='#';dl.classList.add('off');}
-  document.getElementById('modal-overlay').classList.add('open');
-}
-
 function switchModalImg(id,idx){
 
     const p =
@@ -645,7 +590,7 @@ function switchModalImg(id,idx){
   imgArea.querySelectorAll('img').forEach(i=>i.remove());
   document.querySelectorAll('.mit').forEach((b,i)=>b.classList.toggle('on',i===idx));
   if(imgs[idx]){const img=document.createElement('img');img.src=gdrive(imgs[idx]);imgArea.insertBefore(img,imgArea.firstChild);}
-}
+
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
 
 function renderChrono(){
