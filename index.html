@@ -316,15 +316,21 @@ function initials(name){return name.split(' ').map(w=>w[0]).join('').substring(0
 function badgeClass(s){return{Built:'sb-b',Unbuilt:'sb-u','On Site':'sb-o',Competition:'sb-c'}[s]||'sb-c'}
 
 function setMode(mode,btn){
+
   document.querySelectorAll('.mnav').forEach(b=>b.classList.remove('active'));
+
   btn.classList.add('active');
-  ['canvas','chrono','people','exhibition'].forEach(m=>{
-    document.getElementById('view-'+m).style.display=m===mode?'block':'none';
-  });
-  if(mode==='canvas')layoutMasonry();
-  if(mode==='chrono')renderChrono();
-  if(mode==='people')renderPeople();
-  if(mode==='exhibition')renderExhibition();
+
+  ['canvas','chrono','people','exhibition']
+      .forEach(m=>{
+          document.getElementById('view-'+m).style.display = m===mode ? 'block' : 'none';
+      });
+  if(mode==='canvas')      layoutMasonry();
+  if(mode==='chrono')      renderChrono();
+  if(mode==='people')      renderPeople();
+  if(mode==='exhibition')      renderExhibition();
+  // hide image toggle in exhibition
+  document.querySelector('.img-mode-toggle').style.display =mode==='exhibition' ? 'none' : 'flex';
 }
 
 function toggleFilter(cat,val,el){
@@ -747,7 +753,7 @@ function renderExhibition(){
 
 }
 
-let exTimer=null;
+
 function layoutExhibition(){
   clearTimeout(exTimer);
   exTimer=setTimeout(()=>{
@@ -887,6 +893,9 @@ function loadDemo(){
 
 function setImgMode(mode){
 
+if(document.getElementById('view-exhibition').style.display==='block')
+    return;
+  
     imgMode = mode;
 
     document.getElementById('btn-photo')
