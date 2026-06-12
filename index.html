@@ -719,14 +719,22 @@ function renderExhibition(){
     canvas.innerHTML='<div style="padding:40px;color:rgba(0,0,0,0.3);font-family:Century Gothic,sans-serif;font-size:13px">No exhibition data — add projects to the Exhibition tab in your sheet</div>';
     return;
   }
-  exProjects.forEach(p=>{
-    const card=document.createElement('div');
-    card.className='pcard';card.dataset.id=p.id;
-    const imgSrc=gdrive(imgMode==='drawing'?p.drawing:imgMode==='model'?p.model:p.img);
-    card.innerHTML='<div class="card-img" id="ci-'+p.id+'">'+(imgSrc?'<img src="'+imgSrc+'" alt="">':'<div class="ph"></div>')+'<div class="card-band"><div class="card-name">'+p.name+'</div></div></div>'+((p.themes&&p.themes.length)?'<div class="theme-flags"><div class="theme-corner"></div></div>':'');
-    card.onclick = () => openModal(p.id);
-    canvas.appendChild(card);
-  });
+  box.querySelectorAll('img').forEach(i=>i.remove());
+
+  const imgs = [
+    p.img,
+    p.drawing,
+    p.model
+  ].filter(Boolean);
+  imgs.forEach(src=>{
+    const img = document.createElement('img');
+    img.src = gdrive(src);
+    img.style.cssText =
+        'display:block;width:100%;height:auto;margin-bottom:8px;';
+
+     box.appendChild(img);
+
+});
   layoutExhibition();
 }
 
