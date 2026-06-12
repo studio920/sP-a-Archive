@@ -716,26 +716,35 @@ function renderExhibition(){
   const canvas=document.getElementById('ex-canvas');
   canvas.innerHTML='';
   if(!exProjects.length){
-    canvas.innerHTML='<div style="padding:40px;color:rgba(0,0,0,0.3);font-family:Century Gothic,sans-serif;font-size:13px">No exhibition data — add projects to the Exhibition tab in your sheet</div>';
+    canvas.innerHTML=
+      '<div style="padding:40px;color:rgba(0,0,0,0.3);font-family:Century Gothic,sans-serif;font-size:13px">' +
+      'No exhibition data — add projects to the Exhibition tab in your sheet' +
+      '</div>';
     return;
   }
-  box.querySelectorAll('img').forEach(i=>i.remove());
+  exProjects.forEach(p=>{
+    const card=document.createElement('div');
+    card.className='pcard';
+    card.onclick=()=>openModal(p.id);
+    const box=document.createElement('div');
+    box.className='cimg';
+    const imgs=[p.img,p.drawing,p.model].filter(Boolean);
+    imgs.forEach(src=>{
+      const img=document.createElement('img');
+      img.src=gdrive(src);
+      img.style.cssText='display:block;width:100%;height:auto;margin-bottom:8px;';
+      box.appendChild(img);
+    });
+    card.appendChild(box);
+    const meta=document.createElement('div');
+    meta.className='cmeta';
+    meta.innerHTML='<div class="cn">'+p.name+'</div>'+'<div class="cc">'+(p.year||'')+'</div>';
+    card.appendChild(meta);
+    canvas.appendChild(card);
+  });
 
-  const imgs = [
-    p.img,
-    p.drawing,
-    p.model
-  ].filter(Boolean);
-  imgs.forEach(src=>{
-    const img = document.createElement('img');
-    img.src = gdrive(src);
-    img.style.cssText =
-        'display:block;width:100%;height:auto;margin-bottom:8px;';
-
-     box.appendChild(img);
-
-});
   layoutExhibition();
+
 }
 
 let exTimer=null;
