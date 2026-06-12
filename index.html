@@ -973,10 +973,12 @@ if(document.getElementById('view-exhibition').style.display==='block')
 }
 window.dispatchEvent(new Event('resize'));
 
+
 function toggleSection(header){
   header.classList.toggle('open');
   header.nextElementSibling.classList.toggle('open');
 }
+
 function toggleSidebar(){
   const sb=document.querySelector('.sidebar');
   const ov=document.getElementById('sidebar-overlay');
@@ -985,9 +987,12 @@ function toggleSidebar(){
   ov.classList.toggle('open');
   hb.innerHTML=sb.classList.contains('open')?'&#10005;':'&#9776;';
 }
+
 document.querySelectorAll('.sb-item').forEach(item=>{
   item.addEventListener('click',()=>{if(window.innerWidth<=768)toggleSidebar();});
 });
+
+
 
 window.addEventListener('resize',layoutMasonry);
 
